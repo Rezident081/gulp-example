@@ -12,7 +12,7 @@ const stringify = require("stringify");
 const babelify = require("babelify");
 const config = require("./config")();
 
-gulp.task("build:styles", function () {
+gulp.task("build:styles", () => {
     return gulp.src(config.appStyle)
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss([autoprefixer, cssnano])
@@ -25,7 +25,7 @@ gulp.task("build:styles", function () {
         .pipe(connect.reload());
 });
 
-gulp.task("build:js", function () {
+gulp.task("build:js", () => {
     return gulp.src(config.app)
         .pipe(bro({
             transform: [
@@ -37,44 +37,44 @@ gulp.task("build:js", function () {
                 }]
             ]
         })
-        .on("error", function (err) { console.log(err); }))
+        .on("error", (err) => console.log(err) ))
         .pipe(gulp.dest(config.dist + "/js"))
         .pipe(connect.reload());
 });
 
-gulp.task("copy:files", function () {
+gulp.task("copy:files", () => {
     return gulp.src(config.assets)
         .pipe(gulp.dest(config.dist + "/assets"))
 });
 
-gulp.task('build:html', function () {
+gulp.task('build:html', () => {
     return gulp.src(config.index)
         .pipe(gulp.dest(config.dist))
         .pipe(connect.reload());
 });
 
-gulp.task("watch:styles", ["build:styles"], function () {
+gulp.task("watch:styles", ["build:styles"], () => {
     gulp.watch(config.styles, ["build:styles"]);
-})
+});
 
-gulp.task("watch:js", ["build:js"], function () {
+gulp.task("watch:js", ["build:js"], () => {
     gulp.watch(config.scripts, ["build:js"]);
-})
+});
 
-gulp.task("watch:files", ["copy:files"], function () {
+gulp.task("watch:files", ["copy:files"], () => {
     gulp.watch(config.assets, ["copy:files"]);
-})
+});
 
-gulp.task("watch:html", ["build:html"], function () {
+gulp.task("watch:html", ["build:html"], () => {
     gulp.watch(config.index, ["build:html"]);
-})
+});
 
-gulp.task("serve", ["watch:styles", "watch:js", "watch:html", "watch:files"], function () {
+gulp.task("serve", ["watch:styles", "watch:js", "watch:html", "watch:files"], () => {
     connect.server({
         root: "dist",
         port: 8080,
         livereload: true
     })
-})
+});
 
 gulp.task("default", ["serve"]);
